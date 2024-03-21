@@ -22,7 +22,7 @@ class App {
       host: "localhost",
       port: 3306,
       username: "root",
-      password: "",
+      password: "Inge2026gt!?",
       database: "energy",
       synchronize: true,
       entities: [User, Client, MeterType],
