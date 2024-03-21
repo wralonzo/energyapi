@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToOne,
+  OneToMany,
 } from "typeorm";
 import { Client } from "./Client";
 
@@ -48,6 +48,6 @@ export class User extends BaseEntity {
   @DeleteDateColumn()
   dateDeleted: Date;
 
-  @OneToOne(() => Client, (client) => client.clientFk)
+  @OneToMany(() => Client, (client) => client.clientFk)
   clientFk: Client;
 }

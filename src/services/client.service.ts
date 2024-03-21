@@ -16,7 +16,11 @@ export default class ClientService {
 
   public async getAll() {
     try {
-      const data = await Client.find();
+      const data = await Client.find({
+        order:{
+          dataCreated: 'DESC'
+        }
+      });
       return data;
     } catch (error) {}
   }

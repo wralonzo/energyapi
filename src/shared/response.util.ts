@@ -16,7 +16,6 @@ class ResponseService {
       };
       return res.status(dataResponse.statusCode).send(dataResponse);
     } catch (error) {
-      console.log(error);
       const dataResponse = {
         statusCode: error.statusCode ?? 500,
         message: error.mesage ?? "Internal server error",

@@ -17,7 +17,11 @@ export default class MeterTypeService {
 
   public async getAll() {
     try {
-      const data = await MeterType.find();
+      const data = await MeterType.find({
+        order: {
+          dataCreated: "DESC",
+        },
+      });
       return data;
     } catch (error) {}
   }

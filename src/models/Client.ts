@@ -8,7 +8,6 @@ import {
   DeleteDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToOne,
 } from "typeorm";
 import { MeterType } from "./MeterType";
 import { User } from "./User";
@@ -60,9 +59,9 @@ export class Client extends BaseEntity {
   @JoinColumn([{ name: "idMeterType", referencedColumnName: "id" }])
   meterTypeFk: MeterType;
 
-  @OneToOne(() => User, (user) => user.clientFk, {
+  @ManyToOne(() => User, (user) => user.clientFk, {
     onDelete: "CASCADE",
   })
   @JoinColumn([{ name: "idUser", referencedColumnName: "id" }])
-  clientFk: Client;
+  clientFk: User;
 }

@@ -25,7 +25,6 @@ export default class ClientController {
   public async create(req: express.Request, res: express.Response) {
     try {
       const dataUser: IClient = req.body;
-      console.log(req.body);
       const data = await new ClientService().create(dataUser);
       return new ResponseService().returnRequest(res, data);
     } catch (error) {
