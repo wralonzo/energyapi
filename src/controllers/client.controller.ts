@@ -3,6 +3,8 @@ import ValidateUrl from "../services/validate-url..service";
 import ResponseService from "../shared/response.util";
 import ClientService from "../services/client.service";
 import IClient from "../interfaces/client.interface";
+import ICounter from "../interfaces/counter.interface";
+import CounterService from "../services/counter.service";
 
 export default class ClientController {
   public path = "/client";
@@ -17,6 +19,8 @@ export default class ClientController {
     this.router.use(this.validateUrl.validateInput);
     this.router.post(this.path, this.create);
     this.router.get(this.path, this.find);
+    this.router.get(this.path + "/counter/:id", this.findOneCounter);
+    this.router.post(this.path + "/counter", this.createCounter);
     this.router.get(this.path + "/:id", this.findOne);
     this.router.put(this.path + "/:id", this.update);
     this.router.delete(this.path + "/:id", this.delete);
@@ -37,9 +41,42 @@ export default class ClientController {
     }
   }
 
+  public async createCounter(req: express.Request, res: express.Response) {
+    try {
+      const dataUpdate: ICounter = req.body;
+      await new CounterService().updateAll(
+        dataUpdate.idClient
+      );
+      const data = await new CounterService().create(dataUpdate);
+      return new ResponseService().returnRequest(res, data);
+    } catch (error) {
+      return new ResponseService().returnRequest(
+        res,
+        error,
+        error.statusCode,
+        error.message
+      );
+    }
+  }
+
   public async find(req: express.Request, res: express.Response) {
     try {
       const data: Array<IClient> = await new ClientService().getAll();
+      return new ResponseService().returnRequest(res, data);
+    } catch (error) {
+      return new ResponseService().returnRequest(
+        res,
+        error,
+        error.statusCode,
+        error.message
+      );
+    }
+  }
+
+  public async findOneCounter(req: express.Request, res: express.Response) {
+    try {
+      const medidor: string = req.params.id;
+      const data: IClient = await new ClientService().getOneCounterData(medidor);
       return new ResponseService().returnRequest(res, data);
     } catch (error) {
       return new ResponseService().returnRequest(

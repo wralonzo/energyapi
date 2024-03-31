@@ -7,22 +7,33 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import { Client } from "./Client";
 
 @Entity()
-export class MeterType extends BaseEntity {
+export class CounterTracking extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ type: 'double' })
-  amount: number;
+  @Column()
+  idClient: number;
 
   @Column()
-  medida: string;
+  monto: number;
+
+  @Column()
+  previus: number;
+
+  @Column()
+  before: number;
+
+  @Column()
+  status: number;
 
   @CreateDateColumn()
   dataCreated: Date;
@@ -33,6 +44,9 @@ export class MeterType extends BaseEntity {
   @DeleteDateColumn()
   dateDeleted: Date;
 
-  @OneToMany(() => Client, (client) => client.meterTypeFk)
-  meterTypeFk: MeterType[];
+  @ManyToOne(() => Client, (user) => user.counterTrackingFk, {
+    onDelete: "CASCADE",
+  })
+  @JoinColumn([{ name: "idClient", referencedColumnName: "id" }])
+  counterTrackingFk: Client;
 }

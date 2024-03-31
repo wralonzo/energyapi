@@ -1,8 +1,10 @@
-import * as express from "express";
+import express from "express";
 import { DataSource } from "typeorm";
 import { User } from "./models/User";
 import { Client } from "./models/Client";
 import { MeterType } from "./models/MeterType";
+import { CounterTracking } from "./models/Counter";
+import dotenv from "dotenv";
 
 class App {
   public app: express.Application;
@@ -10,6 +12,7 @@ class App {
 
   constructor(controllers: any[], port: number) {
     this.app = express();
+    dotenv.config();
     this.port = port;
     this.initializeModels();
     this.initializeMiddlewares();
@@ -17,15 +20,16 @@ class App {
   }
 
   private async initializeModels() {
+    console.log(process.env.DB_HOST);
     const db = new DataSource({
       type: "mysql",
-      host: "localhost",
-      port: 3306,
-      username: "root",
-      password: "Inge2026gt!?",
-      database: "energy",
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       synchronize: true,
-      entities: [User, Client, MeterType],
+      entities: [User, Client, MeterType, CounterTracking],
       migrations: ["src/migration/*.{ts, ts}"],
     });
     if (db === undefined) {

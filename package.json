@@ -12,9 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/nodemailer": "^6.4.14",
+    "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.2",
+    "nodemailer": "^6.9.13",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

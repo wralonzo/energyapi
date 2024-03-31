@@ -1,8 +1,11 @@
-export default interface IMeterType {
+export default interface ICounter {
   id?: number;
   name?: string;
+  idClient?: number;
   monto?: number;
-  medida?: string;
+  previus?: number;
+  before?: number;
+  status?: number;
   dataCreated?: Date;
   dateUpdated?: Date;
   dateDeleted?: Date;

@@ -1,25 +1,25 @@
 {
-    "compilerOptions": {
-      "outDir": "./dist",
-      "rootDir": "./src",
-      "sourceMap": true,
-      "module": "commonjs",
-      "target": "es2022",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "resolveJsonModule": true,
-      "typeRoots": [
-        "node_modules/@types"
-      ],
-      "lib": [
-          "dom",
-          "es2017"
-      ]
-    },
-    "exclude": [
-      "dist",
-      "build",
-      "node_modules"
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "module": "commonjs",
+    "target": "es2022",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "typeRoots": [
+      "node_modules/@types"
     ],
-  
-  }
+    "lib": [
+      "dom",
+      "es2017"
+    ]
+  },
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
+  ],
+}

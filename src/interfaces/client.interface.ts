@@ -6,6 +6,7 @@ export default interface IClient {
   clientType?: string;
   idMeterType?: number;
   idUser?: number;
+  numeroMedidor?: string;
   coments?: string;
   location?: string;
   alert?: string;

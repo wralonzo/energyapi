@@ -41,6 +41,7 @@ class UserController {
   public async createUser(req: express.Request, res: express.Response) {
     try {
       const dataUser: IUser = req.body;
+      console.log(dataUser);
       const data = await new UserService().createUser(dataUser);
       return new ResponseService().returnRequest(res, data);
     } catch (error) {

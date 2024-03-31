@@ -7,6 +7,7 @@ export default class ClientService {
 
   public async create(body: IClient): Promise<Client> {
     try {
+      await this.getOneCounter(body.numeroMedidor);
       const data = await Client.save(body as Client);
       return data;
     } catch (error) {
@@ -17,9 +18,9 @@ export default class ClientService {
   public async getAll() {
     try {
       const data = await Client.find({
-        order:{
-          dataCreated: 'DESC'
-        }
+        order: {
+          dataCreated: "DESC",
+        },
       });
       return data;
     } catch (error) {}
@@ -56,6 +57,41 @@ export default class ClientService {
       });
       if ((await deleted.softRemove()).dateDeleted) return { deleted: true };
       throw new CustomError(409, "No se actualizo el cliente");
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getOneCounter(numeroMedidor: string): Promise<Client> {
+    try {
+      const data = await Client.findOne({
+        where: { numeroMedidor },
+      });
+      if (data)
+        throw new CustomError(
+          409,
+          "Ya existe el numero de contador asociado a otro cliente"
+        );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async getOneCounterData(numeroMedidor: string): Promise<Client> {
+    try {
+      const data = await Client.findOne({
+        relations: {
+          meterTypeFk: true,
+          counterTrackingFk: true,
+        },
+        where: { numeroMedidor },
+      });
+      if (data) return data;
+      throw new CustomError(
+        409,
+        "No existe el cliente"
+      );
     } catch (error) {
       throw error;
     }

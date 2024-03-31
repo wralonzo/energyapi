@@ -8,9 +8,12 @@ import {
   DeleteDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import { MeterType } from "./MeterType";
 import { User } from "./User";
+import { CounterTracking } from "./Counter";
+// import { Counter } from "./Counter";
 
 @Entity()
 export class Client extends BaseEntity {
@@ -38,6 +41,9 @@ export class Client extends BaseEntity {
   @Column({ nullable: true })
   coments: string;
 
+  @Column({ nullable: true, unique: true })
+  numeroMedidor: string;
+
   @Column({ nullable: true })
   location: string;
 
@@ -64,4 +70,7 @@ export class Client extends BaseEntity {
   })
   @JoinColumn([{ name: "idUser", referencedColumnName: "id" }])
   clientFk: User;
+
+  @OneToMany(() => CounterTracking, (counter) => counter.counterTrackingFk)
+  counterTrackingFk: CounterTracking[];
 }
