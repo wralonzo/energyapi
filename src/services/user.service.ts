@@ -8,9 +8,22 @@ class UserService {
   public async login(userad: string, password: string) {
     try {
       const user = await User.findOne({
+        relations: {
+          clientFk: true,
+        },
         where: { user: userad },
       });
-      if (user && user.password === password) return user;
+      if (user && user.password === password) {
+        const dataClient: any = user.clientFk;
+
+        return {
+          ...user,
+          idClient: dataClient.length > 0 ? user.clientFk.id : null,
+          nameClient: dataClient.length > 0 ? dataClient[0].name : null,
+          counter: dataClient.length > 0 ? dataClient[0].numeroMedidor : null,
+          test: "test",
+        };
+      }
 
       throw new CustomError(409, "No existe el usuario");
     } catch (error) {

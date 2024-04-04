@@ -1,8 +1,8 @@
-import * as nodemial from "nodemailer";
-
-// Configurar el transporte
-const transporter = nodemial.createTransport({
-  service: process.env.EMAIL_SERVICE,
+import * as nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASSWORD,

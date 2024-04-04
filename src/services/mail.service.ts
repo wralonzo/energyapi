@@ -1,27 +1,30 @@
-import IClient from "../interfaces/client.interface";
-import ICounter from "../interfaces/counter.interface";
-import { CounterTracking } from "../models/Counter";
-import ResponseService from "../shared/response.util";
 import transporter from "../shared/send-mail.service";
 import CustomError from "./custom-error.service";
+import dotenv from "dotenv";
+export default class EmailService {
+  constructor() {
+    dotenv.config();
+  }
 
-export default class CounterService {
-  constructor() {}
-
-  public async create(body: IClient) {
+  public async sendMail(
+    alert: string,
+    email: string,
+    factura: string,
+    amount: string
+  ) {
     try {
       const mailOptions = {
         from: process.env.EMAIL,
-        to: body.email,
-        subject: "Notificación de facturacion electrónica",
-        text: `Nombre: ${body.name}\nCorreo: ${body.email}\nMensaje: ${body.alert}`,
+        to: email,
+        subject: "Factura " + factura,
+        text: alert,
+        html: `<h3> ${alert} <br></h3><h3>Factura ${factura}</h3><strong>Monto ${amount}</strong>`,
       };
-
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           throw new CustomError(409, "Error al enviar el correo");
         } else {
-          return true;
+          return info.response;
         }
       });
     } catch (error) {

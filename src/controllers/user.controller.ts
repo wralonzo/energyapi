@@ -3,6 +3,8 @@ import ValidateUrl from "../services/validate-url..service";
 import UserService from "../services/user.service";
 import ResponseService from "../shared/response.util";
 import IUser from "../interfaces/user.interface";
+import ClientService from "../services/client.service";
+import CounterService from "../services/counter.service";
 
 class UserController {
   public path = "/user";
@@ -41,7 +43,6 @@ class UserController {
   public async createUser(req: express.Request, res: express.Response) {
     try {
       const dataUser: IUser = req.body;
-      console.log(dataUser);
       const data = await new UserService().createUser(dataUser);
       return new ResponseService().returnRequest(res, data);
     } catch (error) {
@@ -99,6 +100,12 @@ class UserController {
 
   public async deleteUser(req: express.Request, res: express.Response) {
     try {
+      const dataClient = await new ClientService().getOneByUser(+req.params.id);
+      console.log(dataClient);
+      if (dataClient) {
+        new CounterService().deleteAll(dataClient.id);
+        new ClientService().delete(dataClient.id);
+      }
       const data = await new UserService().deleteUser(+req.params.id);
       return new ResponseService().returnRequest(res, data);
     } catch (error) {

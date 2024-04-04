@@ -37,6 +37,17 @@ export default class CounterService {
     }
   }
 
+  public async getAllClient(id: number) {
+    try {
+      const data = await CounterTracking.findOne({
+        where: { idClient: id },
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public async update(id: number, data: ICounter) {
     try {
       await this.getOne(id);
@@ -70,6 +81,21 @@ export default class CounterService {
       });
       if ((await deleted.softRemove()).dateDeleted) return { deleted: true };
       throw new CustomError(409, "No se actualizo el contador");
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  public async deleteAll(id: number) {
+    try {
+      await CounterTracking.update(
+        {
+          idClient: id,
+        },
+        {
+          dateDeleted: new Date(),
+        }
+      );
     } catch (error) {
       throw error;
     }

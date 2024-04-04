@@ -3,6 +3,7 @@ export default interface ICounter {
   name?: string;
   idClient?: number;
   monto?: number;
+  price?: number;
   previus?: number;
   before?: number;
   status?: number;

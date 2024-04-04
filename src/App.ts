@@ -20,7 +20,6 @@ class App {
   }
 
   private async initializeModels() {
-    console.log(process.env.DB_HOST);
     const db = new DataSource({
       type: "mysql",
       host: process.env.DB_HOST,

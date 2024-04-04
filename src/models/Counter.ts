@@ -23,13 +23,16 @@ export class CounterTracking extends BaseEntity {
   @Column()
   idClient: number;
 
-  @Column()
+  @Column("decimal", { precision: 12, scale: 2 })
   monto: number;
 
-  @Column()
+  @Column("decimal", { precision: 12, scale: 2 })
+  price: number;
+
+  @Column("decimal", { precision: 12, scale: 2 })
   previus: number;
 
-  @Column()
+  @Column("decimal", { precision: 12, scale: 2 })
   before: number;
 
   @Column()

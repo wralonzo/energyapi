@@ -62,6 +62,17 @@ export default class ClientService {
     }
   }
 
+  public async getOneByUser(id: number) {
+    try {
+      const data = await Client.findOne({
+        where: { idUser: id },
+      });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public async getOneCounter(numeroMedidor: string): Promise<Client> {
     try {
       const data = await Client.findOne({
@@ -86,12 +97,14 @@ export default class ClientService {
           counterTrackingFk: true,
         },
         where: { numeroMedidor },
+        order: {
+          counterTrackingFk: {
+            dataCreated: "desc",
+          },
+        },
       });
       if (data) return data;
-      throw new CustomError(
-        409,
-        "No existe el cliente"
-      );
+      throw new CustomError(409, "No existe el cliente");
     } catch (error) {
       throw error;
     }

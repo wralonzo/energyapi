@@ -61,12 +61,14 @@ export class Client extends BaseEntity {
 
   @ManyToOne(() => MeterType, (meterType) => meterType.meterTypeFk, {
     onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "idMeterType", referencedColumnName: "id" }])
   meterTypeFk: MeterType;
 
   @ManyToOne(() => User, (user) => user.clientFk, {
     onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @JoinColumn([{ name: "idUser", referencedColumnName: "id" }])
   clientFk: User;
