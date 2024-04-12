@@ -1,3 +1,4 @@
+import Mail from "nodemailer/lib/mailer";
 import transporter from "../shared/send-mail.service";
 import CustomError from "./custom-error.service";
 import dotenv from "dotenv";
@@ -10,15 +11,22 @@ export default class EmailService {
     alert: string,
     email: string,
     factura: string,
-    amount: string
+    amount: string,
+    path: string
   ) {
     try {
-      const mailOptions = {
+      const mailOptions: Mail.Options = {
         from: process.env.EMAIL,
         to: email,
         subject: "Factura " + factura,
         text: alert,
         html: `<h3> ${alert} <br></h3><h3>Factura ${factura}</h3><strong>Monto ${amount}</strong>`,
+        attachments: [
+          {
+            filename: "Factura.pdf",
+            path: path,
+          },
+        ],
       };
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -28,7 +36,7 @@ export default class EmailService {
         }
       });
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 }

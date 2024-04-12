@@ -8,6 +8,13 @@ import CounterService from "../services/counter.service";
 import IUser from "../interfaces/user.interface";
 import UserService from "../services/user.service";
 import EmailService from "../services/mail.service";
+import { join } from "path";
+import { mkdirSync } from "fs";
+import PdfPrinter from "pdfmake";
+import { fonts, tableFormat } from "../constants/pdf";
+import { checkIfFileOrDirectoryExists } from "../constants/validatepath";
+import * as fs from "fs";
+import PdfFonts from "pdfmake/build/vfs_fonts";
 
 export default class ClientController {
   public path = "/client";
@@ -24,6 +31,7 @@ export default class ClientController {
     this.router.get(this.path, this.find);
     this.router.get(this.path + "/counter/:id", this.findOneCounter);
     this.router.delete(this.path + "/counter/:id", this.deleteCounter);
+    this.router.delete(this.path + "/pdf/:id", this.deleteCounter);
     this.router.post(this.path + "/counter", this.createCounter);
     this.router.get(this.path + "/:id", this.findOne);
     this.router.put(this.path + "/:id", this.update);
@@ -58,17 +66,36 @@ export default class ClientController {
   public async createCounter(req: express.Request, res: express.Response) {
     try {
       const dataUpdate: ICounter = req.body;
+      console.log(dataUpdate);
       const clientData = await new ClientService().getOne(dataUpdate.idClient);
       await new CounterService().updateAll(dataUpdate.idClient);
       const data = await new CounterService().create(dataUpdate);
+
+      const printer = new PdfPrinter(fonts);
+
+      const docDefinition: any = tableFormat(data, clientData.name);
+
+      const PATH_ORIGIN = join(__dirname, "../../static/pdf");
+      if (!checkIfFileOrDirectoryExists(PATH_ORIGIN)) {
+        mkdirSync(PATH_ORIGIN);
+      }
+      const FILE_NAME = new Date().toISOString() + ".pdf";
+      const PATH = `${PATH_ORIGIN}/${FILE_NAME}`;
+      console.log(JSON.stringify(docDefinition));
+
+      const pdfDoc = printer.createPdfKitDocument(docDefinition, {});
+      pdfDoc.pipe(fs.createWriteStream(PATH));
+      pdfDoc.end();
       await new EmailService().sendMail(
         clientData.alert,
         clientData.email,
         data.id.toString(),
-        dataUpdate.price.toString()
+        dataUpdate.price.toString(),
+        PATH
       );
       return new ResponseService().returnRequest(res, data);
     } catch (error) {
+      // throw error;
       return new ResponseService().returnRequest(
         res,
         error,
@@ -165,4 +192,24 @@ export default class ClientController {
       );
     }
   }
+
+  // public async getPdf(req: express.Request, res: express.Response) {
+  //   try {
+  //     const printer = new PdfPrinter(fonts);
+  //     const docDefinition = tableFormat([]);
+  //     const PATH_ORIGIN = join(__dirname, "../../../static/pdf");
+  //     if (!checkIfFileOrDirectoryExists(PATH_ORIGIN)) {
+  //       mkdirSync(PATH_ORIGIN);
+  //     }
+  //     const FILE_NAME = new Date().toISOString() + ".pdf";
+  //     const PATH = `${PATH_ORIGIN}/${FILE_NAME}`;
+
+  //     const pdfDoc = printer.createPdfKitDocument(docDefinition, {});
+  //     pdfDoc.pipe(fs.createWriteStream(PATH));
+  //     pdfDoc.end();
+  //     return res.sendFile(PATH);
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }
