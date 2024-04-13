@@ -80,8 +80,6 @@ export default class ClientController {
       }
       const FILE_NAME = new Date().toISOString() + ".pdf";
       const PATH = `${PATH_ORIGIN}/${FILE_NAME}`;
-      console.log(JSON.stringify(docDefinition));
-
       const pdfDoc = printer.createPdfKitDocument(docDefinition, {});
       pdfDoc.pipe(fs.createWriteStream(PATH));
       pdfDoc.end();
