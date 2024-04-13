@@ -13,7 +13,12 @@ export const tableFormat = (counter: ICounter, client: string) => {
         table: {
           body: [
             ["Lectura anterior", "Lectura actual", "Consumo", "Precio"],
-            [counter.before, counter.previus, counter.monto, counter.price],
+            [
+              counter.before,
+              counter.previus,
+              counter.monto,
+              `Q. ${counter.price}`,
+            ],
           ],
         },
         layout: {

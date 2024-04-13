@@ -66,7 +66,6 @@ export default class ClientController {
   public async createCounter(req: express.Request, res: express.Response) {
     try {
       const dataUpdate: ICounter = req.body;
-      console.log(dataUpdate);
       const clientData = await new ClientService().getOne(dataUpdate.idClient);
       await new CounterService().updateAll(dataUpdate.idClient);
       const data = await new CounterService().create(dataUpdate);
